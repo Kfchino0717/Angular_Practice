@@ -1,0 +1,31 @@
+<br><br><br><br>
+<div class="left">
+<h3>註冊</h3>
+<h4>帳號 :</h4>
+<p>
+    <input type="text" class="form-control" placeholder="10個字以下" required maxlength="10" [(ngModel)]="addName">
+</p>
+<div *ngFor="let account of checkList">
+    <div *ngIf="addName == account.name;">
+        已有同名帳號
+    </div>
+</div>
+<br>
+<h4>密碼：</h4>
+<p>
+    <input type="text" class="form-control" placeholder="20個字以下" required maxlength="20" [(ngModel)]="addPassword">
+</p>
+    <div *ngIf="addPassword.length < 6;">
+        密碼強度太弱
+    </div>
+    <button type="button" (click)="addList();">提交</button>
+<br>
+
+<a routerLink = "/login" routerLinkActive = "active">已有帳號</a>
+</div>
+<div class="right">
+    <div class="TopHight"></div>
+    <div class="message">
+        <app-form-message></app-form-message>
+    </div>
+</div>

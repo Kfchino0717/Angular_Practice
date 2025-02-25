@@ -1,0 +1,125 @@
+<div class="left">
+  <div class="postListTop">
+  </div>
+  <h2>一覽</h2>
+  <ul>
+    <li *ngFor="let post of paginatedPosts; let i = index">
+      <nav class="ahover">
+        <a [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">
+          {{(currentPage-1) * itemsPerPage + i + 1}}.{{post.title}}
+        </a>
+        <p style="text-align: right;">{{post.time}}</p>
+      </nav>
+    </li>
+  </ul>
+  <button (click)="prevPage()" [disabled]="currentPage === 1">上一頁</button>
+  <button (click)="nextPage()" [disabled]="(currentPage * itemsPerPage) >= posts.length">下一頁</button>
+</div>
+
+<div class="center">
+  <div class="postListTop">
+  </div>
+  <li *ngFor="let post of post">
+    <h3>更新貼文</h3>
+    <hr>
+    <h3>id: {{post.id}}</h3>
+    <h4>標題 :</h4>
+    <p>
+      <input type="text" class="form-control" [placeholder]="post.title" [(ngModel)]="addTitle">
+    </p>
+    <h4>內容：</h4>
+    <p>
+      <textarea type="text" class="form-control" [placeholder]="post.content" [(ngModel)]="addContent">
+      </textarea>
+    </p>
+    <h4>檔案：</h4>
+    <p>
+      <input type="file" class="form-control" (change)="onFileSelected($event)" multiple>
+    </p>
+    <div class="input-group-append">
+      <button class="btn btn-secondary" type="button" (click)="addList(post.id)">更新貼文</button>
+    </div>
+
+    <br>
+
+    <h3>更新留言：一覽</h3>
+    <hr>
+    <ul>
+      <li *ngFor="let comment of post.comments">
+        <a [href]="comment.id" (click)="$event.preventDefault(); searchComment(comment.id)">{{comment.name}}</a>
+      </li>
+    </ul>
+
+  <li *ngFor="let comment of comment">
+    <h4>名字:</h4>
+    <p>
+      <input type="text" class="form-control" [placeholder]="comment.name" [(ngModel)]="addName">
+    </p>
+    <h4>內容：</h4>
+    <p>
+      <textarea type="text" class="form-control" [placeholder]="comment.content" [(ngModel)]="addContent">
+      </textarea>
+    </p>
+    <div class="input-group-append">
+      <button class="btn btn-secondary" type="button" (click)="putComment(comment.id)">更新留言</button>
+    </div>
+  </li>
+</div>
+
+<div class="right">
+
+  <div class="search">
+    <ul>
+      <input #searchBox id="search-box" type="text" class="form-control" placeholder="輸入相關標題或內容">
+      <button type="button"
+        (click)="searchPosttitle(searchBox.value);searchContent(searchBox.value);log(searchBox.value);">
+        <img src="assets/Vector.svg" width="30" height="30">
+      </button>
+    </ul>
+  </div>
+  <div class="message">
+    <div class="postListTop">
+    </div>
+    <app-form-message></app-form-message>
+  </div>
+  <div class="space">
+  </div>
+  <div class="top">
+  </div>
+  <div class="result">
+    <div *ngIf="searchBox.value!=''">
+      <div class="title">
+        <h3>相關標題</h3>
+        <div *ngFor="let post of posts">
+          <div class="searchhover">
+            <!--搜尋大小寫都找得到-->
+            <a *ngIf="post.title == searchBox.value || post.title == (searchBox.value|uppercase) || post.title ==(searchBox.value|lowercase)"
+              [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">
+              {{post.id}}: {{post.title}}
+              <br>
+              <div class="time">
+                {{post.time}}
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h3>相關內容</h3>
+      <div class="title">
+        <div *ngFor="let post of similarContent">
+          <div class="searchhover">
+            <a [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">{{post.id}}: {{post.title}}
+              <br>
+              <div class="time">
+                {{post.time}}
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <router-outlet></router-outlet>

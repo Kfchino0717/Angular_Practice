@@ -1,0 +1,102 @@
+<br><br><br><br>
+<div class="left">
+    <h3>查找已留言的內容</h3>
+    <hr>
+    <h4>帳號 :</h4>
+    <p>
+        <input type="text" class="form-control" placeholder="10個字以下" required maxlength="10" [(ngModel)]="addName">
+    </p>
+    <h4>密碼 :</h4>
+    <p>
+        <input type="password" class="form-control" placeholder="20個字以下" required maxlength="10" [(ngModel)]="addPassword">
+    </p>
+    <p>
+        <a routerLink="/register" routerLinkActive="active">沒有帳號，點擊註冊</a>
+        <button (click)="reset()">清空</button>
+    </p>
+    <div class="space">
+    </div>
+    <hr>
+    <div class="space">
+    </div>
+    <p>
+        <button (click)="checkAccount(addName,addPassword);searchAccount(addName,addPassword)">登入</button>
+    </p>
+    <div class="space-2">
+    </div>
+    <div *ngFor="let account of accountMessage">
+        {{account.name}}登入成功
+        <div class="space-2">
+        </div>
+        <div *ngIf="account.name != null">
+            <button (click)="searchMessage(account.name)">查找{{account.name}}的留言</button>
+        </div>
+
+    </div>
+
+    <br>
+
+</div>
+<div class="center">
+    <h3>留言資料</h3>
+    <li *ngFor="let post of posts">
+        <b>{{post.name}}的所有留言：</b>
+        <ul *ngFor="let comment of post.comments">
+            <div class="space">
+            </div>
+            <div class="include">
+                <b>{{ comment.name }}</b>: {{ comment.content }}
+                <p>
+                    <a [href]="comment.postId" (click)="$event.preventDefault();searchPostid(comment.postId)">搜尋此貼文</a>
+                </p>
+                <p style="text-align: right;">{{ comment.time | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+                <div class="space">
+                </div>
+                <button type="button" (click)=" deleteComment(comment.id, comment.name)" mat-raised-button
+                    matTooltip="刪除這筆留言"
+                    aria-label="Button that displays a tooltip when focused or hovered over">刪除留言</button>
+            </div>
+            <div class="space">
+            </div>
+            <div class="space">
+            </div>
+            <div class="space">
+            </div>
+            <div class="space">
+            </div>
+            <div class="space">
+            </div>
+            <hr>
+        </ul>
+    </li>
+</div>
+
+<div class="postListTop">
+</div>
+<div class="right">
+    <div class="TopHight"></div>
+    <ul>
+        <li *ngFor="let post of post">
+            <div class="space">
+            </div>
+            <b>{{post.id}}: {{ post.title }}</b>
+            <hr>
+            <p>{{ post.content }}</p>
+            <p>
+                <br>
+            <p style="text-align: right;">{{ post.time | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+            <hr>
+            <div class="space">
+            </div>
+            <b>Files:</b>
+            <ul>
+                <li *ngFor="let file of post.files">
+                    <a [href]="file.fileName" (click)=" download(file.fileName)">{{ file.fileName }}</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div class="message">
+        <app-form-message></app-form-message>
+    </div>
+</div>

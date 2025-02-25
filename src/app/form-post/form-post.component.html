@@ -1,0 +1,51 @@
+<div class="left">
+  <div class="TopHight">
+  </div>
+  <h2>新貼文</h2>
+  <hr>
+  <br>
+  <h4>標題 :</h4>
+  <p>
+    <input type="text" class="form-control" placeholder="20個字以下" required maxlength="20" [(ngModel)]="addTitle">
+  </p>
+  <br>
+  <h4>內容：</h4>
+  <p>
+    <textarea type="text" class="form-control" placeholder="500個字以下" required maxlength="500" [(ngModel)]="addContent">
+    </textarea>
+  </p>
+  <h4>檔案：</h4>
+  <p>
+    <input type="file" class="form-control" (change)="onFileSelected($event)" multiple>
+  </p>
+  <div class="input-group-append">
+    <button class="btn btn-secondary" type="button" (click)="addList()">提交</button>
+  </div>
+  <div class="space"></div>
+  <div class="space"></div>
+  <div class="space"></div>
+  <div class="space"></div>
+  <div class="space"></div>
+
+  <ng-container *ngFor="let post of postlist">
+    <div class="space"></div>
+    <hr>
+    <h3>張貼完成</h3>
+    <p>標題: {{post.title}}</p>
+    <p>內容: {{post.content}}</p>
+    <p>檔案: </p>
+    <ul>
+      <li *ngFor="let file of post.files">
+        <a [href]="file.fileName" (click)=" download(file.fileName)">{{ file.fileName }}</a>
+      </li>
+    </ul>
+  </ng-container>
+</div>
+
+<div class="right">
+  <div class="TopHight">
+  </div>
+  <div class="message">
+    <app-form-message></app-form-message>
+  </div>
+</div>

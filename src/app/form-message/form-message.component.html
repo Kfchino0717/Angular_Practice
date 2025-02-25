@@ -1,0 +1,22 @@
+<div class="news">
+    <div *ngIf="messageService.message.length > 0">
+        <label mat-raised-button [matBadge]="messageCounter" matBadgeColor="warn" for="toggleControl"
+            class="toggleButton">提示訊息</label>
+    </div>
+</div>
+<input type="checkbox" id="toggleControl">
+<label for="toggleControl" class="toggleOverlay"></label>
+<div id="toggleMe">
+    <div class="include">
+        <div *ngIf="messageService.message.length">
+            <div *ngFor='let message of messageService.message'>{{message}}</div>
+            <p>點擊任意鍵關閉</p>
+            <!--將按鈕連結到messageService.clear()-->
+            <div class="bottom"></div>
+        </div>
+    </div>
+    <button type="button" class="clear"
+                (click)="messageService.clear()">Clear</button>
+    <label for="toggleControl" class="buttonA">Close</label>
+</div>
+<!--將<div>中的元素展示於訊息清單-->

@@ -1,0 +1,150 @@
+<div class="left">
+  <div class="postListTop">
+  </div>
+  <h2>一覽</h2>
+  <ul>
+    <li *ngFor="let post of paginatedPosts; let i = index">
+      <nav class="ahover">
+        <a [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">
+          {{(currentPage-1) * itemsPerPage + i + 1}}.{{post.title}}
+        </a>
+        <p style="text-align: right;">{{post.time}}</p>
+      </nav>
+    </li>
+  </ul>
+  <button (click)="prevPage()" [disabled]="currentPage === 1">上一頁</button>
+  <button (click)="nextPage()" [disabled]="(currentPage * itemsPerPage) >= posts.length">下一頁</button>
+</div>
+
+<div class="center">
+  <div class="postListTop">
+  </div>
+  <ul>
+    <li *ngFor="let post of post">
+      <h3>{{post.id}}: {{ post.title }}</h3>
+      <hr>
+      <p>{{ post.content }}
+      <p>
+        <br>
+      <p style="text-align: right;">{{ post.time | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+      <div *ngIf="post.files.length > 0">
+        <h3>Files:</h3>
+        <ul>
+          <li *ngFor="let file of post.files">
+            <a [href]="file.fileName" (click)=" download(file.fileName)">{{ file.fileName }}</a>
+            <button type="button" (click)=" deleteFile(file.id,file.fileName)" 
+              mat-raised-button matTooltip="刪除這筆檔案"
+              aria-label="Button that displays a tooltip when focused or hovered over">刪除檔案</button>
+          </li>
+        </ul>
+      </div>
+      <br>
+      <hr>
+      <br>
+      <h3>Comments:</h3>
+      <ul>
+        <li *ngFor="let comment of post.comments">
+          <p><b>{{ comment.name }}</b>: {{ comment.content }}</p>
+          <p style="text-align: right;">{{ comment.time | date:'yyyy/MM/dd HH:mm:ss' }}</p>
+          <br>
+          <br>
+        </li><!--後端更改為id-->
+        <hr>
+        <br>
+      </ul>
+      <button type="button" (click)=" deletePost(post.id,post.title);" 
+        mat-raised-button
+        matTooltip="刪除包含標題、內容、檔案，與相關留言的所有資料"
+        aria-label="Button that displays a tooltip when focused or hovered over">刪除貼文
+      </button>
+      <br>
+      <br>
+      <h3>新增留言</h3>
+      <hr>
+      <p>
+        <mat-form-field class="full-width-2">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="5個字以下" [(ngModel)]="addName" required maxlength="5">
+        </mat-form-field>
+      </p>
+      <div class="space"></div>
+      <p>
+        <mat-form-field class="full-width">
+          <mat-label>Comment</mat-label>
+          <input matInput placeholder="100個字以下" [(ngModel)]="addContent" required type="text" placeholder="Pick one"
+            aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of options" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </p>
+      <div class="input-group-append">
+        <button type="button" (click)="addList(post.id)" mat-raised-button matTooltip="新增這筆留言"
+          aria-label="Button that displays a tooltip when focused or hovered over">新增留言</button>
+      </div>
+      <br>
+      <br>
+      <br>
+    </li>
+
+  </ul>
+</div>
+
+<div class="right">
+
+  <div class="search">
+    <ul>
+      <input #searchBox id="search-box" type="text" class="form-control" placeholder="輸入相關標題或內容" (input)="searchPosttitle(searchBox.value);searchContent(searchBox.value);log(searchBox.value);">
+      <button type="button"
+        (click)="searchPosttitle(searchBox.value);searchContent(searchBox.value);log(searchBox.value);">
+        <img src="assets/Vector.svg" width="30" height="30">
+      </button>
+    </ul>
+  </div>
+  <div class="message">
+    <div class="postListTop">
+    </div>
+    <app-form-message></app-form-message>
+  </div>
+  <div class="space">
+  </div>
+  <div class="top">
+  </div>
+  <div class="result">
+    <div *ngIf="searchBox.value!=''">
+      <div class="title">
+        <h3>相關標題</h3>
+        <div *ngFor="let post of posts">
+          <div class="searchhover">
+            <!--搜尋大小寫都找得到-->
+            <a *ngIf="post.title == searchBox.value || post.title == (searchBox.value|uppercase) || post.title ==(searchBox.value|lowercase)"
+              [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">
+              {{post.id}}: {{post.title}}
+              <br>
+              <div class="time">
+                {{post.time}}
+              </div>
+            </a>
+          </div>
+        </div>
+        <hr>
+        <h3>相關內容</h3>
+        <div class="title">
+          <div *ngFor="let post of similarContent">
+            <div class="searchhover">
+              <a [href]="post.id" (click)="$event.preventDefault(); searchPost(post.id)">{{post.id}}: {{post.title}}
+                <br>
+                <div class="time">
+                  {{post.time}}
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
